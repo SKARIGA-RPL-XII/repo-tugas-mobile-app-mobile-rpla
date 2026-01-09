@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+config.py
+fintrack-ae370-firebase-adminsdk-fbsvc-7b7e966f8c.json
+app/core/config.py
