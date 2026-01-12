@@ -13,7 +13,15 @@ app = FastAPI()
 # ================= JWT CONFIG =================
 class Settings(BaseModel):
     authjwt_secret_key: str = "o7XJcV8Z8Jm9dP0C5eH0zP3rZJZ3u6s4m0XxYy2H8LkPqTnBvA1D"
+    authjwt_denylist_enabled: bool = True
+    authjwt_denylist_token_checks: set ={"access"}
 
+denylist = set()
+
+@AuthJWT.token_in_denylist_loader
+def check_in_token_denylist(decrypted_token):
+    jti = decrypted_token["jti"]
+    return jti in denylist
 
 @AuthJWT.load_config
 def get_config():
@@ -109,6 +117,16 @@ def login(
 
     return {"status": "success", "access_token": token, "token_type": "bearer"}
 
+
+# ================= LOG OUT =================
+@app.post("/logout")
+def logout(
+    Authorize: AuthJWT = Depends()
+):
+    Authorize.jwt_required()
+    jti = Authorize.get_raw_jwt()["jti"]
+    denylist.add(jti)
+    return {"status":"success", "content":"berhasil logout"}
 
 if __name__ == "__main__":
     import uvicorn
