@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'section/sec1.dart';
-import 'section/sec2.dart'; //
-// import 'section/sec3.dart';
+// import 'section/sec2.dart'; //
+import 'section/sec3.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: LoginPage(),
-      home: ProfilePage(),
-      // home: ChangePasswordPage(),
+      // home: ProfilePage(),
+      home: ChangePasswordPage(),
     );
   }
 }
