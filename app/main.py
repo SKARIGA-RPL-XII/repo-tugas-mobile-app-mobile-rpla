@@ -117,6 +117,89 @@ def login(
 
     return {"status": "success", "access_token": token, "token_type": "bearer"}
 
+# ================= PROFILE =================
+@app.get('/profile')
+def profile(
+    Authorize: AuthJWT = Depends(),
+):
+    try:
+        Authorize.jwt_required()
+        user_id = Authorize.get_jwt_subject()
+        if user_id is None:
+            return JSONResponse(status_code=401, content={"msg": "Unauthorized"})
+        users_ref = config.db.collection("users")
+        doc = users_ref.document(user_id).get()
+        if not doc.exists:
+            return JSONResponse(status_code=404, content={"msg": "User not found"})
+
+        user_data = doc.to_dict()
+        return {"status": "success", "data": user_data}
+    except Exception as e:
+        print("Error fetching profile:", str(e))
+        return JSONResponse(status_code=401, content={"msg": "Internal Server Error"})
+
+# ================= UPDATE PROFIL =================
+@app.post('/update_profile')
+def update_profile(
+    fullname: str = Form(...),
+    name: str = Form(...),
+    email: str = Form(...),
+    # phone: str = Form(...),
+    Authorize: AuthJWT = Depends()
+):
+    try:
+        Authorize.jwt_required()
+        user_id = Authorize.get_jwt_subject()
+        if user_id is None:
+            return JSONResponse(status_code=401, content={"msg": "Unauthorized"})
+        users_ref = config.db.collection("users")
+        users_doc = users_ref.document(user_id)
+
+        if not users_doc.get().exists:
+            return JSONResponse(status_code=404, content={"msg": "User not found"})
+        
+        update_data = {
+            "fullname": fullname,
+            "usernm": name,
+            "email": email,
+            # "phone": phone,
+        }
+        users_doc.update(update_data)
+        return {"status":"success", "msg":"Profile updated successfully", "data":update_data}
+            
+    except Exception as e:
+        print("Error updating profile:", str(e))
+        return JSONResponse(status_code=401, content={"msg": "Internal Server Error"})
+
+# ================= UPDATE PASSWORD =================
+@app.post('/update_password')
+def update_password(
+    password: str = Form(...),
+    Authorize: AuthJWT = Depends()
+):
+    try:
+        Authorize.jwt_required()
+        user_id = Authorize.get_jwt_subject()
+        if user_id is None:
+            return JSONResponse(status_code=401, content={"msg": "Unauthorized"})
+        users_ref = config.db.collection("users")
+        users_doc = users_ref.document(user_id)
+
+        if not users_doc.get().exists:
+            return JSONResponse(status_code=404, content={"msg": "User not found"})
+        
+        pwd = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+        stored = pwd.decode("utf-8")
+        
+        update_data = {
+            "password": stored,
+        }
+        users_doc.update(update_data)
+        return {"status":"success", "msg":"Password updated successfully", "data":update_data}
+
+    except Exception as e:
+        print("Error updating password:", str(e))
+        return JSONResponse(status_code=401, content={"msg": "Internal Server Error"})
 
 # ================= LOG OUT =================
 @app.post("/logout")
