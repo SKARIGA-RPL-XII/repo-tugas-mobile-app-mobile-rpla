@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({super.key});
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,202 +11,173 @@ class EditProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        centerTitle: true,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.only(left: 16),
           child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: const Color(0xFF00244B),
+            decoration: const BoxDecoration(
+              color: Color(0xFF00244B),
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: Icon(Icons.arrow_back, color: Colors.white, size: 20),
+              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
               onPressed: () => Navigator.pop(context),
-              alignment: Alignment.center,
             ),
           ),
         ),
         title: const Text(
           'Edit Profile',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
-        centerTitle: true,
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🔹 FOTO PROFIL (dengan ikon edit)
+              const SizedBox(height: 20),
+
+              /// ================= FOTO PROFIL =================
               Center(
                 child: Stack(
-                  alignment: Alignment.bottomRight,
+                  clipBehavior: Clip.none,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 40,
-                      backgroundImage: NetworkImage('https://via.placeholder.com/80'),
-                    ),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF00244B),
-                        shape: BoxShape.circle,
+                      backgroundImage: NetworkImage(
+                        'https://via.placeholder.com/80',
                       ),
-                      child: Icon(Icons.edit, color: Colors.white, size: 14),
+                    ),
+                    Positioned(
+                      right: -2,
+                      bottom: -2,
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          color: Colors.white, // lingkaran putih
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/tambah.svg',
+                            width: 25,
+                            height: 25,
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFF00244B),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 32),
 
-              // 🔹 FULL NAME
-              const Text('Full Name'),
+              /// ================= FULL NAME =================
+              const Text(
+                'Full Name',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
               const SizedBox(height: 8),
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Jane Austin Raders',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
+              _styledFormField(
+                hint: 'Jane Austin Raders',
+                suffixIcon: SvgPicture.asset(
+                  'assets/icons/name.svg',
+                  width: 18,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.srcIn,
                   ),
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black),
                 ),
               ),
+
               const SizedBox(height: 16),
 
-              // 🔹 NICK NAME
-              const Text('Nick Name'),
+              /// ================= NICK NAME =================
+              const Text(
+                'Nick Name',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
               const SizedBox(height: 8),
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Jane',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
+              _styledFormField(
+                hint: 'Jane',
+                suffixIcon: SvgPicture.asset(
+                  'assets/icons/name.svg',
+                  width: 18,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.srcIn,
                   ),
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black),
                 ),
               ),
+
               const SizedBox(height: 16),
 
-              // 🔹 EMAIL
-              const Text('Email'),
+              /// ================= EMAIL =================
+              const Text(
+                'Email',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
               const SizedBox(height: 8),
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'janeaustin0280@gmail.com',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    suffixIcon: Icon(Icons.email_outlined, color: Colors.grey[400]),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
+              _styledFormField(
+                hint: 'janeaustin0280@gmail.com',
+                suffixIcon: SvgPicture.asset(
+                  'assets/icons/sms.svg',
+                  width: 18,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.srcIn,
                   ),
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black),
                 ),
               ),
+
               const SizedBox(height: 16),
 
-              // 🔹 PHONE
-              const Text('Phone'),
+              /// ================= PHONE =================
+              const Text(
+                'Phone',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
               const SizedBox(height: 8),
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: '+62 8976 2780 8278',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    suffixIcon: Icon(Icons.phone_outlined, color: Colors.grey[400]),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
+              _styledFormField(
+                hint: '+62 8976 2780 8278',
+                suffixIcon: SvgPicture.asset(
+                  'assets/icons/call.svg',
+                  width: 18,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.srcIn,
                   ),
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black),
                 ),
               ),
+
               const SizedBox(height: 16),
 
-              // 🔹 COMPANY
-              const Text('Company'),
-              const SizedBox(height: 8),
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'PT INDONESIA SEJAHTERA',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                  ),
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black),
-                ),
+              /// ================= COMPANY =================
+              const Text(
+                'Company',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
+              const SizedBox(height: 8),
+              _styledFormField(hint: 'PT INDONESIA SEJAHTERA'),
+
               const SizedBox(height: 32),
 
-              // 🔹 BUTTONS
+              /// ================= BUTTON =================
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        side: BorderSide(color: Colors.grey[300]!),
-                      ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Discarded')),
-                        );
-                      },
+                    child: OutlinedButton(
+                      onPressed: () {},
                       child: const Text('Discard'),
                     ),
                   ),
@@ -213,24 +185,78 @@ class EditProfilePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0B2C4D),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        backgroundColor: const Color(0xFF00244B),
                       ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Profile saved successfully')),
-                        );
-                      },
-                      child: const Text('Save'),
+                      onPressed: () {},
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 32),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+              Divider(color: Colors.grey[300]),
+              const SizedBox(height: 16),
+
+              /// ================= LOG OUT =================
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/logout.svg',
+                    width: 18,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.red,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Log Out',
+                    style: TextStyle(color: Colors.red, fontSize: 16),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// ================= FORM FIELD STYLE =================
+  static Widget _styledFormField({required String hint, Widget? suffixIcon}) {
+    return Container(
+      height: 38,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300, width: 1),
+      ),
+      child: TextField(
+        style: const TextStyle(fontSize: 14),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(color: Colors.grey[400]),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 10,
+          ),
+          suffixIcon: suffixIcon == null
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: suffixIcon,
+                ),
+          suffixIconConstraints: const BoxConstraints(
+            minHeight: 16,
+            minWidth: 16,
+          ),
+          border: InputBorder.none,
         ),
       ),
     );

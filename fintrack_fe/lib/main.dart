@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 // import 'section/sec1.dart';
 // import 'section/sec2.dart'; //
-import 'section/sec3.dart';
+// import 'section/sec3.dart';
+import 'section/sec4.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: LoginPage(),
       // home: ProfilePage(),
-      home: ChangePasswordPage(),
+      // home: ChangePasswordPage(),
+      home: ProfilePage(),
     );
   }
 }
