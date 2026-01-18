@@ -1,16 +1,16 @@
-import os
 import sys
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
 import bcrypt
 import datetime
+from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Form, Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBearer
 from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel
 from app.core import config
-from app.routers import users, rooms, schedule, auth
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_DIR)
+from app.routers import users, rooms, schedule, auth, activity_history
 
 app = FastAPI()
 security = HTTPBearer()
@@ -30,11 +30,11 @@ def get_config():
 def read_root():
     return {"status": "API running"}
 
-
+app.include_router(auth.router, tags=["Authentikasi"])
 app.include_router(users.router, tags=["Users"])
 app.include_router(rooms.router, tags=["Rooms"])
 app.include_router(schedule.router, tags=["Schedule"])
-app.include_router(auth.router, tags=["Authentikasi"])
+app.include_router(activity_history.router, tags=["Activity History"])
 
 if __name__ == "__main__":
     import uvicorn
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=port,
-        ssl_certfile="cert.pem",
-        ssl_keyfile="key.pem",
+        # ssl_certfile="cert.pem",
+        # ssl_keyfile="key.pem",
         reload=True,
     )

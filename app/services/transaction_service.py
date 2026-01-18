@@ -2,6 +2,7 @@ import datetime, bcrypt
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from app.core import config
+from app.services.activity_history_service import create_activity_history
 
 def process_add_transaction(room_id, balance, income, expense, description, Authorize):
     try:
@@ -60,6 +61,19 @@ def process_add_transaction(room_id, balance, income, expense, description, Auth
         }
 
         doc_ref.set(transaction_doc)
+
+        # Log aktivitas ke activity_history
+        create_activity_history(
+            user_id=current_user,
+            company_name=company_name,
+            account_type="Checking",  # Bisa disesuaikan sesuai kebutuhan
+            account_number="",  # Bisa ditambahkan dari form jika diperlukan
+            balance=balance,
+            is_transfer_from=True,  # Secara default transaksi baru adalah transfer from
+            status="pending",
+            description=description,
+            transaction_id=transaction_id,
+        )
 
         return {
             "status": "success",
@@ -213,6 +227,19 @@ def process_update_transaction(balance, income, expense, description, Authorize)
         trans_ref.update(update_data)
 
         updated_trans = trans_ref.get().to_dict()
+
+        # Log aktivitas ke activity_history
+        create_activity_history(
+            user_id=user_id,
+            company_name=updated_trans.get("company_name"),
+            account_type="Checking",
+            account_number="",
+            balance=updated_trans.get("balance", 0),
+            is_transfer_from=True,
+            status="accept",  # Update transaction dianggap sudah accepted
+            description=f"Updated transaction: {description or updated_trans.get('description', '')}",
+            transaction_id=transaction_id,
+        )
 
         return {
             "status": "success",
