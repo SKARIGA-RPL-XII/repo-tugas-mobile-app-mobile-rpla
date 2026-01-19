@@ -2,6 +2,7 @@ import datetime, bcrypt
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from app.core import config
+import os
 
 def process_register(fullname, name, email, password, confirm_password):
     if not fullname.strip() or not name.strip() or not email.strip() or not password:
@@ -24,11 +25,13 @@ def process_register(fullname, name, email, password, confirm_password):
         doc_ref = users_col.document()
         uid = doc_ref.id
         now = datetime.datetime.utcnow().isoformat() + "Z"
+        image = f"/assets/img/default.png"
 
         user_doc = {
             "id": uid,
             "fullname": fullname,
             "usernm": name,
+            "userimg": image,
             "password": stored,
             "email": email,
             "createddate": now,

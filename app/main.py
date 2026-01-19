@@ -7,6 +7,7 @@ import datetime
 from fastapi.security import HTTPBearer
 from fastapi import FastAPI, Form, Depends
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel
 from app.core import config
@@ -29,6 +30,13 @@ def get_config():
 @app.get("/")
 def read_root():
     return {"status": "API running"}
+
+# ================= AKSES FILE =================
+app.mount(
+    "/assets",
+    StaticFiles(directory="app/assets"),
+    name="assets"
+)
 
 app.include_router(auth.router, tags=["Authentikasi"])
 app.include_router(users.router, tags=["Users"])

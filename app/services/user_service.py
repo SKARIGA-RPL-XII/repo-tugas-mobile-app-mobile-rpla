@@ -2,6 +2,9 @@ import datetime, bcrypt
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from app.core import config
+from uuid import uuid4 
+import os
+import shutil
 
 denylist = set()
 
@@ -78,7 +81,7 @@ def process_update_profile(
     fullname: str,
     name: str,
     email: str,
-    # phone: str,
+    userimg: str,
     Authorize
 ):
     try:
@@ -86,17 +89,35 @@ def process_update_profile(
         user_id = Authorize.get_jwt_subject()
         if user_id is None:
             return JSONResponse(status_code=401, content={"msg": "Unauthorized"})
+        if userimg.content_type not in ["image/png", "image/jpg", "image/jpeg"]:
+            return JSONResponse(status_code=400, content={"status": "error", "msg": "File harus berformat png jpg dan jpeg"})
         users_ref = config.db.collection("users")
         users_doc = users_ref.document(user_id)
 
         if not users_doc.get().exists:
             return JSONResponse(status_code=404, content={"msg": "User not found"})
         
+        UPLOAD_DIR = "app/assets/img"
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+        ext = userimg.filename.split(".")[-1].lower()
+        if ext not in ["png", "jpg", "jpeg"]:
+            return JSONResponse(
+                status_code=400,
+                content={"msg": "File harus berformat png, jpg, atau jpeg"}
+            )
+
+        filename = f"{uuid4()}.{ext}"
+        filepath = os.path.join(UPLOAD_DIR, filename)
+
+        with open(filepath, "wb") as buffer:
+            shutil.copyfileobj(userimg.file, buffer)
+
         update_data = {
             "fullname": fullname,
             "usernm": name,
             "email": email,
-            # "phone": phone,
+            "userimg": f"/assets/img/{filename}",
         }
         users_doc.update(update_data)
         return {"status":"success", "msg":"Profile updated successfully", "data":update_data}

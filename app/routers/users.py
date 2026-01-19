@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form
+from fastapi import APIRouter, Depends, Form, File, UploadFile
 from fastapi.responses import JSONResponse
 from app.services.user_service import process_update_password, process_profile, process_update_profile, process_logout
 from fastapi_jwt_auth import AuthJWT
@@ -26,11 +26,11 @@ def update_profile(
     fullname: str = Form(...),
     name: str = Form(...),
     email: str = Form(...),
-    # phone: str = Form(...),
+    userimg: UploadFile = File(...),
     Authorize: AuthJWT = Depends(),
     token: str = Depends(security)
 ):
-    return process_update_profile(fullname, name, email, Authorize)
+    return process_update_profile(fullname, name, email, userimg, Authorize)
 
 @router.post('/update_password')
 def update_password(
