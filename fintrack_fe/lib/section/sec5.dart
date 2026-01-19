@@ -174,7 +174,7 @@ class _AddSaldoPageState extends State<AddSaldoPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: DropdownButtonFormField<String>(
-                    initialValue: selectedAccountType, // ✅ Tambahkan value
+                    initialValue: selectedAccountType,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
