@@ -8,9 +8,8 @@ class AddSaldoPage extends StatefulWidget {
 }
 
 class _AddSaldoPageState extends State<AddSaldoPage> {
-  // State variables untuk menyimpan input
   String? selectedAccountType;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

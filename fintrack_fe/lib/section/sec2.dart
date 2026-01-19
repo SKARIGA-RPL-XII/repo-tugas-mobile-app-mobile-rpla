@@ -8,7 +8,6 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: null,
       body: Column(
         children: [
           // 🔷 HEADER
@@ -17,8 +16,8 @@ class ProfilePage extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 251.0,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF00244B),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF00244B),
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(40),
                   ),
@@ -27,14 +26,13 @@ class ProfilePage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 60, left: 32, right: 32),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage: NetworkImage(
-                          'https://via.placeholder.com/80',
-                        ),
+                        backgroundImage:
+                            NetworkImage('https://via.placeholder.com/80'),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Text(
                         'Jane Austin',
                         style: TextStyle(
@@ -43,27 +41,27 @@ class ProfilePage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Text(
                         'janeaustin@gmail.com',
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
+              // 🔔 ICON NOTIFIKASI (Kanan Atas)
               Positioned(
                 top: MediaQuery.of(context).padding.top + 12,
-                left: 16,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                right: 16,
+                child: IconButton(
+                  icon: const Icon(Icons.notifications, color: Colors.white),
+                  onPressed: () {
+                    // Action untuk notifikasi
+                  },
                 ),
               ),
             ],
@@ -72,15 +70,11 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 24),
 
           // 🔷 MENU OPTIONS
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: SizedBox(
-              width: 380.0,
-              height: 227.0,
-              child: ClipRect(
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildMenuItem(
                       context: context,
@@ -105,46 +99,50 @@ class ProfilePage extends StatelessWidget {
                       svgPath: 'assets/icons/language.svg',
                       title: 'Language',
                     ),
+                    const SizedBox(height: 9),
+                    _buildMenuItem(
+                      context: context,
+                      svgPath: 'assets/icons/history.svg',
+                      title: 'History',
+                    ),
                   ],
                 ),
               ),
             ),
           ),
 
-          const Spacer(),
-
-          Divider(
-            thickness: 1,
-            color: Colors.grey[300],
-            indent: 24,
-            endIndent: 24,
-          ),
-
-          // 🔷 LOGOUT 
-          Padding(
-            padding: const EdgeInsets.all(24.0),
+          // 🔷 BOTTOM NAVIGATION (3 Icons)
+          Container(
+            margin: const EdgeInsets.fromLTRB(80, 16, 80, 16),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF00244B),
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SvgPicture.asset(
-                  'assets/icons/logout.svg',
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.red,
-                    BlendMode.srcIn,
-                  ),
+                _buildBottomNavItem(
+                  svgPath: 'assets/icons/home.svg',
+                  onTap: () {
+                    // Navigate to Home
+                  },
                 ),
                 const SizedBox(width: 8),
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Logged out successfully')),
-                    );
+                _buildBottomNavItem(
+                  svgPath: 'assets/icons/calender.svg',
+                  onTap: () {
+                    // Navigate to Calendar
                   },
-                  child: Text(
-                    'Log Out',
-                    style: TextStyle(color: Colors.red, fontSize: 16),
-                  ),
+                ),
+                const SizedBox(width: 8),
+                _buildBottomNavItem(
+                  svgPath: 'assets/icons/account.svg',
+                  isActive: true, // Profile sedang aktif
+                  onTap: () {
+                    // Already on Profile
+                  },
                 ),
               ],
             ),
@@ -168,11 +166,8 @@ class ProfilePage extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('You tapped $title')));
-          },
+          onTap: () {},
+          borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -190,10 +185,36 @@ class ProfilePage extends StatelessWidget {
                 Expanded(
                   child: Text(title, style: const TextStyle(fontSize: 16)),
                 ),
-                // 👇 Tetap pakai ikon bawaan Flutter — tidak perlu SVG
                 Icon(Icons.chevron_right, color: Colors.grey[500]),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomNavItem({
+    required String svgPath,
+    required VoidCallback onTap,
+    bool isActive = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: isActive ? Colors.white : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: SvgPicture.asset(
+          svgPath,
+          width: 24,
+          height: 24,
+          colorFilter: ColorFilter.mode(
+            isActive ? const Color(0xFF00244B) : Colors.white,
+            BlendMode.srcIn,
           ),
         ),
       ),

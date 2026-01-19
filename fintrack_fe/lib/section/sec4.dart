@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({super.key});
+class EditProfilePageTest extends StatelessWidget {
+  const EditProfilePageTest({super.key});
 
   @override
   Widget build(BuildContext context) {
