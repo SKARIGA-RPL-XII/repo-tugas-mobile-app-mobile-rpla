@@ -20,12 +20,13 @@ def add_schedule(
 ):
     return process_add_schedule(schedule_name, description, user_ids, remind_date, remind_hours, remind_active, Authorize)
 
-@router.get("/schedule-detail")
+@router.get("/schedule-detail/{schedule_id}")
 def get_schedule_detail(
+    schedule_id: str,
     Authorize: AuthJWT = Depends(),
     token: str = Depends(security)
 ):
-    return process_get_schedule_detail(Authorize)
+    return process_get_schedule_detail(schedule_id, Authorize)
 
 @router.delete("/delete-schedule")
 def delete_schedule(

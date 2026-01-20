@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel
 from app.core import config
-from app.routers import users, rooms, schedule, auth, activity_history
+from app.routers import users, rooms, schedule, auth, activity_history, notifications
 
 app = FastAPI()
 security = HTTPBearer()
@@ -42,6 +42,7 @@ app.include_router(auth.router, tags=["Authentikasi"])
 app.include_router(users.router, tags=["Users"])
 app.include_router(rooms.router, tags=["Rooms"])
 app.include_router(schedule.router, tags=["Schedule"])
+app.include_router(notifications.router, tags=["Notifications"])
 app.include_router(activity_history.router, tags=["Activity History"])
 
 if __name__ == "__main__":

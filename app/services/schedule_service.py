@@ -84,19 +84,20 @@ def process_add_schedule(schedule_name, description, user_ids, remind_date, remi
         
         doc_ref.set(schedule_doc)
         
-        return {
-            "status": "success",
-            "msg": "Berhasil menambahkan schedule",
-            "schedule_id": schedule_id,
-            "schedule_name": schedule_name,
-            "description": description,
-            "assigned_users": scheduled_users,
-            "remind_date": remind_date,
-            "remind_hours": remind_hours,
-            "remind_active": remind_active,
-            "createddate": now,
-            "createdby": created_by_name,
-        }
+        notifications_col = config.db.collection("notifications")
+        for user_info in scheduled_users:
+            notification_doc = {
+                "user_id": user_info.get("user_id"),
+                "schedule_id": schedule_id,
+                "schedule_name": schedule_name,
+                "description": description,
+                "assigned_users": scheduled_users,
+                "created_by": created_by_name,
+                "status": "pending",
+                "created_date": now,
+                "updated_date": now,
+            }
+            notifications_col.add(notification_doc)
     
     except Exception as e:
         error_msg = str(e)
@@ -105,27 +106,21 @@ def process_add_schedule(schedule_name, description, user_ids, remind_date, remi
             content={"status": "error", "msg": f"Gagal menambahkan schedule: {error_msg}"},
         )
 
-def process_get_schedule_detail(Authorize):
+def process_get_schedule_detail(schedule_id, Authorize):
     try:
         Authorize.jwt_required()
         user_id = Authorize.get_jwt_subject()
         
         schedules_col = config.db.collection("schedules")
-        query = schedules_col.where("createdby", "==", user_id).limit(1)
-        docs = query.stream()
+        doc = schedules_col.document(schedule_id).get()
         
-        schedule_id = None
-        schedule_data = None
-        
-        for doc in docs:
-            schedule_id = doc.id
-            schedule_data = doc.to_dict()
-        
-        if not schedule_id or not schedule_data:
+        if not doc.exists:
             return JSONResponse(
                 status_code=404,
-                content={"status": "error", "msg": "Schedule tidak ditemukan untuk user ini"},
+                content={"status": "error", "msg": "Schedule tidak ditemukan"},
             )
+        
+        schedule_data = doc.to_dict()
         
         return {
             "status": "success",
