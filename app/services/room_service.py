@@ -104,14 +104,13 @@ def process_get_users(Authorize):
 def process_assign_room_users(room_id, user_ids, Authorize):
     try:
         Authorize.jwt_required()
-
         current_user = Authorize.get_jwt_subject()
 
-        if user_ids.startswith("["):
+        if isinstance(user_ids, str) and user_ids.startswith("["):
             import json
             selected_user_ids = json.loads(user_ids)
         else:
-            selected_user_ids = [uid.strip() for uid in user_ids.split(",")]
+            selected_user_ids = [uid.strip() for uid in user_ids.split(",") if uid.strip()]
 
         if not selected_user_ids:
             return JSONResponse(
@@ -129,43 +128,49 @@ def process_assign_room_users(room_id, user_ids, Authorize):
                 content={"status": "error", "msg": "Room tidak ditemukan"},
             )
 
+        room_data = room_doc.to_dict()
+        existing_users = room_data.get("users", [])
+        existing_user_map = {
+            user["user_id"]: user for user in existing_users
+        }
+
         users_col = config.db.collection("users")
-        assigned_users = []
 
         for user_id in selected_user_ids:
+            if user_id in existing_user_map:
+                continue 
+
             user_doc = users_col.document(user_id).get()
             if user_doc.exists:
                 user_data = user_doc.to_dict()
-                assigned_users.append({
+                existing_user_map[user_id] = {
                     "user_id": user_id,
                     "nickname": user_data.get("usernm"),
                     "email": user_data.get("email"),
                     "fullname": user_data.get("fullname"),
-                })
+                }
+
+        updated_users = list(existing_user_map.values())
 
         now = datetime.datetime.utcnow().isoformat() + "Z"
         room_ref.update({
-            "users": assigned_users,
-            "updateddate": now,
+            "users": updated_users,
+            "updateddate": now, 
             "updatedby": current_user,
         })
-
-        updated_room = room_ref.get().to_dict()
 
         return {
             "status": "success",
             "msg": "Berhasil menambahkan user ke room",
             "room_id": room_id,
-            "company_name": updated_room.get("companynm"),
-            "assigned_users": assigned_users,
-            "total_users": len(assigned_users),
+            "total_users": len(updated_users),
+            "assigned_users": updated_users,
         }
 
     except Exception as e:
-        error_msg = str(e)
         return JSONResponse(
             status_code=400,
-            content={"status": "error", "msg": f"Gagal menambahkan user ke room: {error_msg}"},
+            content={"status": "error", "msg": f"Gagal menambahkan user ke room: {str(e)}"},
         )
 
 def process_get_room_details(Authorize):

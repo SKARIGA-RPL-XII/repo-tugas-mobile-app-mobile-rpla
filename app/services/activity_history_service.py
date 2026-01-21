@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from app.core import config
 
-
 def create_activity_history(
     user_id: str,
     company_name: str = None,
@@ -76,7 +75,7 @@ def get_activity_history(user_id: str):
     """
     try:
         activity_col = config.db.collection("activity_history")
-        query = activity_col.where("user_id", "==", user_id).where("is_active", "==", True).order_by("modified_date", direction=-1)
+        query = activity_col.where("user_id", "==", user_id).where("is_active", "==", True)
         
         docs = query.stream()
         activities = []
