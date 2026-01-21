@@ -10,14 +10,15 @@ security = HTTPBearer()
 @router.post("/add-transaction")
 def add_transaction(
     room_id: str = Form(...),
-    balance: float = Form(...),
-    income: float = Form(...),
-    expense: float = Form(...),
+    transaction_date: str = Form(...),
+    amount: float = Form(...),
+    transaction_type: str = Form(...),
+    account_type: str = Form(...),
     description: str = Form(...),
     Authorize: AuthJWT = Depends(),
     token: str = Depends(security),
 ):
-    return process_add_transaction(room_id, balance, income, expense, description, Authorize)
+    return process_add_transaction(room_id, transaction_date, amount, transaction_type, account_type, description, Authorize)
 
 @router.get("/transactions")
 def get_transactions(
@@ -29,11 +30,13 @@ def get_transactions(
 
 @router.put("/update-transaction")
 def update_transaction(
-    balance: float = Form(None),
-    income: float = Form(None),
-    expense: float = Form(None),
+    transaction_id: str = Form(...),
+    transaction_date: str = Form(None),
+    amount: float = Form(None),
+    transaction_type: str = Form(None),
+    account_type: str = Form(None),
     description: str = Form(None),
     Authorize: AuthJWT = Depends(),
     token: str = Depends(security)
 ):
-    return process_update_transaction(balance, income, expense, description, Authorize)
+    return process_update_transaction(transaction_id, transaction_date, amount, transaction_type, account_type, description, Authorize)

@@ -4,7 +4,7 @@ from fastapi_jwt_auth import AuthJWT
 from app.core import config
 from app.services.activity_history_service import create_activity_history
 
-def process_add_transaction(room_id, balance, income, expense, description, Authorize):
+def process_add_transaction(room_id, transaction_date, amount, transaction_type, account_type, description, Authorize):
     try:
         Authorize.jwt_required()
 
@@ -16,10 +16,26 @@ def process_add_transaction(room_id, balance, income, expense, description, Auth
                 content={"status": "error", "msg": "Room ID tidak boleh kosong"},
             )
 
-        if balance < 0 or income < 0 or expense < 0:
+        # Validasi transaction_type
+        valid_types = ["income", "expense"]
+        if transaction_type.lower() not in valid_types:
             return JSONResponse(
                 status_code=400,
-                content={"status": "error", "msg": "Nilai balance, income, dan expense tidak boleh negatif"},
+                content={"status": "error", "msg": f"Transaction type harus berupa: {', '.join(valid_types)}"},
+            )
+
+        # Validasi account_type
+        valid_accounts = ["checking account", "savings account", "virtual account", "petty cash", "bank account"]
+        if account_type.lower() not in valid_accounts:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "msg": f"Account type harus berupa: {', '.join(valid_accounts)}"},
+            )
+
+        if amount <= 0:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "msg": "Amount harus lebih dari 0"},
             )
 
         rooms_col = config.db.collection("rooms")
@@ -49,9 +65,10 @@ def process_add_transaction(room_id, balance, income, expense, description, Auth
             "transaction_id": transaction_id,
             "room_id": room_id,
             "company_name": company_name,
-            "balance": balance,
-            "income": income,
-            "expense": expense,
+            "transaction_date": transaction_date,
+            "amount": amount,
+            "transaction_type": transaction_type.lower(),
+            "account_type": account_type.lower(),
             "description": description,
             "createddate": now,
             "createdby": created_by_name,
@@ -66,10 +83,10 @@ def process_add_transaction(room_id, balance, income, expense, description, Auth
         create_activity_history(
             user_id=current_user,
             company_name=company_name,
-            account_type="Checking",  # Bisa disesuaikan sesuai kebutuhan
-            account_number="",  # Bisa ditambahkan dari form jika diperlukan
-            balance=balance,
-            is_transfer_from=True,  # Secara default transaksi baru adalah transfer from
+            account_type=account_type,
+            account_number="",
+            balance=amount,
+            is_transfer_from=(transaction_type.lower() == "expense"),
             status="pending",
             description=description,
             transaction_id=transaction_id,
@@ -81,9 +98,10 @@ def process_add_transaction(room_id, balance, income, expense, description, Auth
             "transaction_id": transaction_id,
             "room_id": room_id,
             "company_name": company_name,
-            "balance": balance,
-            "income": income,
-            "expense": expense,
+            "transaction_date": transaction_date,
+            "amount": amount,
+            "transaction_type": transaction_type.lower(),
+            "account_type": account_type.lower(),
             "description": description,
             "createddate": now,
             "createdby": created_by_name,
@@ -134,9 +152,10 @@ def process_get_transaction(Authorize):
             trans_data = doc.to_dict()
             transactions_list.append({
                 "transaction_id": trans_data.get("transaction_id"),
-                "balance": trans_data.get("balance"),
-                "income": trans_data.get("income"),
-                "expense": trans_data.get("expense"),
+                "transaction_date": trans_data.get("transaction_date"),
+                "amount": trans_data.get("amount"),
+                "transaction_type": trans_data.get("transaction_type"),
+                "account_type": trans_data.get("account_type"),
                 "description": trans_data.get("description"),
                 "company_name": trans_data.get("company_name"),
                 "createddate": trans_data.get("createddate"),
@@ -166,7 +185,7 @@ def process_get_transaction(Authorize):
             content={"status": "error", "msg": f"Gagal mengambil transaction: {error_msg}"},
         )
 
-def process_update_transaction(balance, income, expense, description, Authorize):
+def process_update_transaction(transaction_id, transaction_date, amount, transaction_type, account_type, description, Authorize):
     try:
         Authorize.jwt_required()
 
@@ -178,65 +197,66 @@ def process_update_transaction(balance, income, expense, description, Authorize)
         modified_by_name = user_data.get("usernm", user_id)
 
         transactions_col = config.db.collection("transactions")
-        query = transactions_col.where("createdby", "==", modified_by_name).order_by("createddate", direction=1).limit(1)
-        docs = query.stream()
+        trans_ref = transactions_col.document(transaction_id)
+        trans_doc = trans_ref.get()
 
-        transaction_id = None
-        trans_data = None
-        
-        for doc in docs:
-            transaction_id = doc.id
-            trans_data = doc.to_dict()
-
-        if not transaction_id or not trans_data:
+        if not trans_doc.exists:
             return JSONResponse(
                 status_code=404,
-                content={"status": "error", "msg": "Transaction tidak ditemukan untuk user ini"},
+                content={"status": "error", "msg": "Transaction tidak ditemukan"},
             )
+
+        trans_data = trans_doc.to_dict()
 
         update_data = {
             "datemodified": datetime.datetime.utcnow().isoformat() + "Z",
             "modifiedby": modified_by_name,
         }
 
-        if balance is not None:
-            if balance < 0:
+        if transaction_date is not None:
+            update_data["transaction_date"] = transaction_date
+
+        if amount is not None:
+            if amount <= 0:
                 return JSONResponse(
                     status_code=400,
-                    content={"status": "error", "msg": "Balance tidak boleh negatif"},
+                    content={"status": "error", "msg": "Amount harus lebih dari 0"},
                 )
-            update_data["balance"] = balance
+            update_data["amount"] = amount
 
-        if income is not None:
-            if income < 0:
+        if transaction_type is not None:
+            valid_types = ["income", "expense"]
+            if transaction_type.lower() not in valid_types:
                 return JSONResponse(
                     status_code=400,
-                    content={"status": "error", "msg": "Income tidak boleh negatif"},
+                    content={"status": "error", "msg": f"Transaction type harus berupa: {', '.join(valid_types)}"},
                 )
-            update_data["income"] = income
+            update_data["transaction_type"] = transaction_type.lower()
 
-        if expense is not None:
-            if expense < 0:
+        if account_type is not None:
+            valid_accounts = ["checking account", "savings account", "virtual account", "petty cash", "bank account"]
+            if account_type.lower() not in valid_accounts:
                 return JSONResponse(
                     status_code=400,
-                    content={"status": "error", "msg": "Expense tidak boleh negatif"},
+                    content={"status": "error", "msg": f"Account type harus berupa: {', '.join(valid_accounts)}"},
                 )
-            update_data["expense"] = expense
+            update_data["account_type"] = account_type.lower()
 
-        trans_ref = transactions_col.document(transaction_id)
+        if description is not None:
+            update_data["description"] = description
+
         trans_ref.update(update_data)
 
         updated_trans = trans_ref.get().to_dict()
 
-        # Log aktivitas ke activity_history
         create_activity_history(
             user_id=user_id,
             company_name=updated_trans.get("company_name"),
-            account_type="Checking",
+            account_type=updated_trans.get("account_type", ""),
             account_number="",
-            balance=updated_trans.get("balance", 0),
-            is_transfer_from=True,
-            status="accept",  # Update transaction dianggap sudah accepted
+            balance=updated_trans.get("amount", 0),
+            is_transfer_from=(updated_trans.get("transaction_type") == "expense"),
+            status="accept",
             description=f"Updated transaction: {description or updated_trans.get('description', '')}",
             transaction_id=transaction_id,
         )
@@ -247,9 +267,10 @@ def process_update_transaction(balance, income, expense, description, Authorize)
             "transaction_id": transaction_id,
             "room_id": updated_trans.get("room_id"),
             "company_name": updated_trans.get("company_name"),
-            "balance": updated_trans.get("balance"),
-            "income": updated_trans.get("income"),
-            "expense": updated_trans.get("expense"),
+            "transaction_date": updated_trans.get("transaction_date"),
+            "amount": updated_trans.get("amount"),
+            "transaction_type": updated_trans.get("transaction_type"),
+            "account_type": updated_trans.get("account_type"),
             "description": updated_trans.get("description"),
             "datemodified": updated_trans.get("datemodified"),
             "modifiedby": modified_by_name,
