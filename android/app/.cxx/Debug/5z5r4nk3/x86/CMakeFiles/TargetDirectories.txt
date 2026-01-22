@@ -1,2 +1,0 @@
-C:/wasborn/fintrack_fe/android/app/.cxx/Debug/5z5r4nk3/x86/CMakeFiles/edit_cache.dir
-C:/wasborn/fintrack_fe/android/app/.cxx/Debug/5z5r4nk3/x86/CMakeFiles/rebuild_cache.dir
