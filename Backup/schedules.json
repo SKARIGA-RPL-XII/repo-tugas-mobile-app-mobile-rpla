@@ -1,0 +1,46 @@
+[
+  {
+    "id": "ZQUoQX4G3CPtxjf0TmGh",
+    "createdby": "useruser",
+    "schedule_id": "ZQUoQX4G3CPtxjf0TmGh",
+    "remind_date": "1",
+    "createddate": "2026-01-18T09:22:10.150901Z",
+    "remind_active": true,
+    "description": "meeting di karlos",
+    "assigned_users": [
+      {
+        "user_id": "gYuRS89f01oLeTEgfHLZ",
+        "fullname": "achmad",
+        "nickname": "achmad",
+        "email": "achmad@gmail.com"
+      }
+    ],
+    "remind_hours": 1,
+    "updateddate": "2026-01-18T09:22:10.150901Z",
+    "updatedby": "useruser",
+    "isactive": true,
+    "schedule_name": "meeting"
+  },
+  {
+    "id": "msso46HQWJtWeXCcmjCZ",
+    "remind_active": true,
+    "createddate": "2026-01-17T17:36:01.910841Z",
+    "remind_date": "20",
+    "updatedby": "a",
+    "schedule_name": "PT. Gen O",
+    "isactive": true,
+    "createdby": "a",
+    "assigned_users": [
+      {
+        "nickname": "a",
+        "email": "a@gmail.com",
+        "user_id": "JwTOdf0fgbDpNzuZNXdn",
+        "fullname": "a"
+      }
+    ],
+    "remind_hours": 1,
+    "updateddate": "2026-01-17T17:36:01.910841Z",
+    "description": "add data produk baru",
+    "schedule_id": "msso46HQWJtWeXCcmjCZ"
+  }
+]

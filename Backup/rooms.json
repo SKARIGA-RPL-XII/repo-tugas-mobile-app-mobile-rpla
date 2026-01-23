@@ -1,0 +1,131 @@
+[
+  {
+    "id": "5EUzsWRoJQt5Zishzyas",
+    "companynm": "gacoan ",
+    "createddate": "2026-01-18T06:41:11.978754Z",
+    "companyid": "5EUzsWRoJQt5Zishzyas",
+    "isactive": true,
+    "createdby": "3Y2GyhiVnujDn3Zd6Jo2",
+    "updatedby": "Gt7PqHD0YH3vQUHpq8yy",
+    "updateddate": "2026-01-21T06:07:04.257486Z",
+    "users": [
+      {
+        "user_id": "3Y2GyhiVnujDn3Zd6Jo2",
+        "fullname": "alwa nadia",
+        "nickname": "alwa",
+        "email": "alwa123@gmail.com"
+      },
+      {
+        "user_id": "Ic4seKyWSCbGSFu8xXHl",
+        "fullname": "achmad",
+        "nickname": "achmad",
+        "email": "achmad@gmail.com"
+      },
+      {
+        "user_id": "X23sadpvcl7E2hut9bLN",
+        "fullname": "anggar",
+        "nickname": "angga",
+        "email": "angga11@gmail.com"
+      }
+    ]
+  },
+  {
+    "id": "CLD3AJo8xzjbRY1nzgCQ",
+    "companynm": "PT maju jaya",
+    "createddate": "2026-01-12T14:38:54.102394Z",
+    "companyid": "CLD3AJo8xzjbRY1nzgCQ",
+    "isactive": true,
+    "updatedby": "lsgFYSUy3Tl2E5TWquKg",
+    "createdby": "lsgFYSUy3Tl2E5TWquKg",
+    "updateddate": "2026-01-12T14:41:33.676522Z",
+    "users": [
+      {
+        "nickname": "angga",
+        "email": "angga@gmail.com",
+        "user_id": "X23sadpvcl7E2hut9bLN",
+        "fullname": "angga"
+      }
+    ]
+  },
+  {
+    "id": "hXyAsMOHXbXo2AtWbDS1",
+    "companynm": "pt maju jaya",
+    "users": [],
+    "createddate": "2026-01-18T06:35:54.789858Z",
+    "companyid": "hXyAsMOHXbXo2AtWbDS1",
+    "isactive": true,
+    "updatedby": "JwTOdf0fgbDpNzuZNXdn",
+    "createdby": "JwTOdf0fgbDpNzuZNXdn",
+    "updateddate": "2026-01-18T06:35:54.789858Z"
+  },
+  {
+    "id": "hfFR6bO12PmIM1qzgZp4",
+    "createddate": "2026-01-20T11:01:15.602269Z",
+    "invite_code": "664141",
+    "companynm": "pt ojiss",
+    "created_by_name": "a",
+    "companyid": "hfFR6bO12PmIM1qzgZp4",
+    "updatedby": "JwTOdf0fgbDpNzuZNXdn",
+    "isactive": true,
+    "code_expiry": "2026-01-20T11:06:15.602269Z",
+    "createdby": "JwTOdf0fgbDpNzuZNXdn",
+    "updateddate": "2026-01-20T11:01:15.602269Z",
+    "users": [
+      {
+        "nickname": "a",
+        "fullname": "a",
+        "email": "a@gmail.com",
+        "status": "owner",
+        "user_id": "JwTOdf0fgbDpNzuZNXdn",
+        "joined_date": "2026-01-20T11:01:15.602269Z"
+      }
+    ],
+    "code_created_date": "2026-01-20T11:01:15.602269Z"
+  },
+  {
+    "id": "jKSHCTwQHkGz4K5U2vrr",
+    "createdby": "Gt7PqHD0YH3vQUHpq8yy",
+    "createddate": "2026-01-20T16:41:48.954898Z",
+    "created_by_name": "afnan",
+    "companyid": "jKSHCTwQHkGz4K5U2vrr",
+    "companynm": "PT Sumber Makmur",
+    "isactive": true,
+    "updatedby": "Gt7PqHD0YH3vQUHpq8yy",
+    "code_expiry": "2026-01-20T17:22:02.434130Z",
+    "code_created_date": "2026-01-20T17:17:02.434130Z",
+    "invite_code": "330158",
+    "updateddate": "2026-01-21T06:05:29.710819Z",
+    "users": [
+      {
+        "user_id": "3Y2GyhiVnujDn3Zd6Jo2",
+        "fullname": "alwa nadia",
+        "nickname": "alwa",
+        "email": "alwa123@gmail.com"
+      },
+      {
+        "user_id": "7fvfUcGsgVysKDzwte9Z",
+        "fullname": "achmad zaenni",
+        "nickname": "achmad",
+        "email": "achmad@gmail.com"
+      }
+    ]
+  },
+  {
+    "id": "sa9wdfaMxJLJofeVgU3w",
+    "createdby": "lpN5N5BZREs6bbUnDLDV",
+    "createddate": "2026-01-18T09:05:38.409809Z",
+    "companyid": "sa9wdfaMxJLJofeVgU3w",
+    "companynm": "PT Rizki WIjaya",
+    "updatedby": "lpN5N5BZREs6bbUnDLDV",
+    "isactive": true,
+    "updateddate": "2026-01-18T09:10:40.254251Z",
+    "users": [
+      {
+        "user_id": "X23sadpvcl7E2hut9bLN",
+        "fullname": "anggar",
+        "nickname": "angga",
+        "email": "angga11@gmail.com"
+      }
+    ]
+  }
+]

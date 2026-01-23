@@ -1,0 +1,50 @@
+[
+  {
+    "id": "VulzkFMgs5WAsp0l6uFC",
+    "created_date": "2026-01-21T08:03:12.178275Z",
+    "company_name": "PT Sumber Makmur",
+    "status": "pending",
+    "is_transfer_from": true,
+    "modified_date": "2026-01-21T08:03:12.178275Z",
+    "account_type": "Checking",
+    "transaction_id": "DAKl41xWJsJG3kem9hwt",
+    "description": "enak enak",
+    "activity_id": "VulzkFMgs5WAsp0l6uFC",
+    "user_id": "Gt7PqHD0YH3vQUHpq8yy",
+    "balance": 2000,
+    "account_number": "",
+    "is_active": true
+  },
+  {
+    "id": "wGvkBB2VFddlBgeo6Wfr",
+    "created_date": "2026-01-21T07:44:54.555452Z",
+    "company_name": "PT Sumber Makmur",
+    "status": "pending",
+    "is_transfer_from": true,
+    "modified_date": "2026-01-21T07:44:54.555452Z",
+    "account_type": "Checking",
+    "transaction_id": "uhlu2hiVPgpGahhRlVWy",
+    "description": "uang makan",
+    "activity_id": "wGvkBB2VFddlBgeo6Wfr",
+    "user_id": "Gt7PqHD0YH3vQUHpq8yy",
+    "balance": 5000,
+    "account_number": "",
+    "is_active": true
+  },
+  {
+    "id": "xVm5PQ1wrGAAuyMweS9I",
+    "created_date": "2026-01-21T18:03:48.213247Z",
+    "account_type": "bank account",
+    "modified_date": "2026-01-21T18:03:48.213247Z",
+    "user_id": "JwTOdf0fgbDpNzuZNXdn",
+    "status": "pending",
+    "transaction_id": "OeeL3W4k9X7hW4UvYvNN",
+    "is_transfer_from": false,
+    "is_active": true,
+    "activity_id": "xVm5PQ1wrGAAuyMweS9I",
+    "company_name": "pt maju jaya",
+    "account_number": "",
+    "description": "gaji",
+    "balance": 500000
+  }
+]
